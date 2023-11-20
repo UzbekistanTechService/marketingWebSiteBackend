@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import { IGoggleProfile } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { genSalt, hash} from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -20,31 +21,44 @@ export class UserService {
         where: { email },
       });
       console.log(existUser);
-      
+
       if (!existUser) {
+        const salt = await genSalt(10);
+        const hashPassword = await hash(email, salt)
+
         const newUser = await this.userRepository.create({
           provider,
           email,
           full_name: displayName,
-          hashed_password: email,
+          hashed_password: hashPassword,
         });
-        const token = await this.jwtService.signAsync({ id: newUser.id });
+        console.log(newUser);
 
-         return {
+        const token = await this.jwtService.signAsync(
+          { id: newUser.id },
+          { secret: 'apple', expiresIn: '1h' },
+        );
+
+        return {
           status: 201,
           message: 'user created',
           data: newUser,
-          token
-         }
+          token,
+        };
       }
-      
-      const token = await this.jwtService.signAsync({ id: existUser.id });
+
+      const token = await this.jwtService.signAsync(
+        { id: existUser.id },
+        { secret: 'apple', expiresIn: '1h' },
+      );
+      console.log(token);
+
       return {
         status: 200,
         message: 'successfully signed',
         data: existUser,
-        token
-      }
+        token,
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

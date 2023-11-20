@@ -10,7 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     SequelizeModule.forFeature([User]),
-    JwtModule.register({ secret: 'apple' }),
+    JwtModule.register({}),
     PassportModule.register({ defaultStrategy: 'google' }),
   ],
   controllers: [UserController],
