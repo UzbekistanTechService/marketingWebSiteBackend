@@ -6,6 +6,7 @@ import {
   Req,
   Body,
   Res,
+  HttpCode,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GoogleOauthGuard } from 'src/guard/google-oauth.guard';
@@ -17,18 +18,19 @@ import { SignupDto } from './dto/signupdto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
+  @HttpCode(200)
   @UseGuards(GoogleOauthGuard)
   @Get('google')
-  authGoogle() { }
+  authGoogle() {}
 
+  @HttpCode(200)
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(@Req() req: any) {
     return this.userService.googleAuthCallback(req.user);
   }
-
 
   @ApiOperation({ summary: 'Sign up' })
   @Post('signup')
@@ -39,7 +41,6 @@ export class UserController {
     return this.userService.signup(signupDto, res);
   }
 
-
   @ApiOperation({ summary: 'Sign in' })
   @Post('signin')
   signin(
@@ -48,7 +49,6 @@ export class UserController {
   ) {
     return this.userService.signin(signinDto, res);
   }
-
 
   @ApiOperation({ summary: 'Sign out' })
   @Post('signout')

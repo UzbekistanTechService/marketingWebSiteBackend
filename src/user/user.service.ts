@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
 import { IGoggleProfile } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { SignupDto } from './dto/signupdto';
+import { compare, genSalt, hash } from 'bcrypt';
 import { Response } from 'express';
-import { hash, compare } from 'bcrypt';
+import { SignupDto } from './dto/signupdto';
 import { SigninDto } from './dto/signin.dto';
 
 @Injectable()
@@ -13,42 +13,48 @@ export class UserService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
-      const existUser = await this.userRepository.findOne({
+      const exist = await this.userRepository.findOne({
         where: { email },
       });
-      if (!existUser) {
-        const newUser = await this.userRepository.create({
+      if (!exist) {
+        const salt = await genSalt(10);
+        const hashed_password = await hash(email, salt);
+        const user = await this.userRepository.create({
           provider,
           email,
           full_name: displayName,
-          hashed_password: email,
+          hashed_password,
         });
-        const token = await this.jwtService.signAsync({ id: newUser.id });
-
+        const token = await this.jwtService.signAsync(
+          { id: user.id },
+          {
+            secret: process.env.GOOGLE_TOKEN_KEY,
+            expiresIn: process.env.GOOGLE_TOKEN_TIME,
+          },
+        );
         return {
           status: 201,
           message: 'user created',
-          data: newUser,
-          token
-        }
+          data: user,
+          token,
+        };
       }
 
-      const token = await this.jwtService.signAsync({ id: existUser.id });
+      const token = await this.jwtService.signAsync({ id: exist.id });
       return {
         status: 200,
         message: 'successfully signed',
-        data: existUser,
-        token
-      }
+        data: exist,
+        token,
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
-
 
   async signup(signupDto: SignupDto, res: Response) {
     try {
@@ -120,7 +126,6 @@ export class UserService {
       throw new BadRequestException(error.message);
     }
   }
-
 
   private async generateToken(jwt_payload: object) {
     try {

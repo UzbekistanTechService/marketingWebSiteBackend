@@ -7,9 +7,7 @@ import { IGoggleProfile } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(
-    configService: ConfigService,
-  ) {
+  constructor(configService: ConfigService) {
     super({
       clientID: configService.get('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
