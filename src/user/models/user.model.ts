@@ -8,7 +8,7 @@ interface UserAttributes {
   provider: ProviderType;
 }
 
-enum ProviderType {
+export enum ProviderType {
   local = 'local',
   google = 'google',
 }

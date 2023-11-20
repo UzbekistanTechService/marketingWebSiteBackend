@@ -3,7 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from 'src/user/models/user.model';
+import { ProviderType, User } from 'src/user/models/user.model';
+import { IGoggleProfile } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -27,8 +28,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ): Promise<any> {
     const { id, displayName, emails, photos } = profile;
 
-    const user = {
-      provider: 'google',
+    const user: IGoggleProfile = {
+      provider: ProviderType.google,
       providerId: id,
       email: emails[0].value,
       displayName,
