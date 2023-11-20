@@ -24,8 +24,6 @@ export class UserController {
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(@Req() req: any, @Res() res: Response) {
-    console.log('req.user: ', req.user);
-
-    // return this.userService.signin(req.user, res);
+    return this.userService.googleAuthCallback(req.user, res);
   }
 }
