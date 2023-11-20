@@ -44,7 +44,13 @@ export class UserService {
         };
       }
 
-      const token = await this.jwtService.signAsync({ id: exist.id });
+      const token = await this.jwtService.signAsync(
+        { id: exist.id },
+        {
+          secret: process.env.GOOGLE_TOKEN_KEY,
+          expiresIn: process.env.GOOGLE_TOKEN_TIME,
+        },
+      );
       return {
         status: 200,
         message: 'successfully signed',
