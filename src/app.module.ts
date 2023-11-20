@@ -17,7 +17,6 @@ import { User } from './user/models/user.model';
       port: +process.env.PG_USER,
       database: process.env.PG_PASS,
       password: process.env.PG_DB,
-      // autoLoadModels: true,
       models: [User],
       logging: true,
     }),

@@ -1,3 +1,1 @@
-export interface UserRegisterDto {
-  
-}
+export interface UserRegisterDto {}

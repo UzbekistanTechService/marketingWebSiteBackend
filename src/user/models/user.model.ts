@@ -41,7 +41,7 @@ export class User extends Model<User, UserAttributes> {
     unique: true,
   })
   full_name: string;
-  
+
   @Column({
     type: DataType.ENUM('local', 'google'),
     allowNull: false,
