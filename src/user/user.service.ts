@@ -19,8 +19,6 @@ export class UserService {
       const existUser = await this.userRepository.findOne({
         where: { email },
       });
-      console.log(existUser);
-      
       if (!existUser) {
         const newUser = await this.userRepository.create({
           provider,
