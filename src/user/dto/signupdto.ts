@@ -1,1 +1,4 @@
-export interface SignUpDto {}
+import { ApiProperty } from "@nestjs/swagger";
+
+export interface SignUpDto {
+}
