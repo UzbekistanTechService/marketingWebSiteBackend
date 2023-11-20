@@ -1,19 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './models/user.model';
+import { ProviderType, User } from './models/user.model';
 import { IGoggleProfile } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Response } from 'express';
 import { SignupDto } from './dto/signupdto';
 import { SigninDto } from './dto/signin.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
-  ) {}
+    private readonly mailService: MailService,
+  ) { }
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -67,10 +69,12 @@ export class UserService {
       const hashed_password = await hash(signupDto.password, 7);
       const user = await this.userRepository.create({
         hashed_password,
+        provider: ProviderType.local,
         ...signupDto,
       });
       const jwt_payload = { id: user.id };
       const token = await this.generateToken(jwt_payload);
+      await this.mailService.sendUserConfirmation(user, token.access_token);
       this.writeToCookie(token.refresh_token, res);
       return {
         message: 'User registreted successfully',

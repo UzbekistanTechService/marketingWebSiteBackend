@@ -14,7 +14,7 @@ import { PollModule } from './poll/poll.module';
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.PG_HOST,
-      port: +process.env.PG_PORT,
+      port: Number(process.env.PG_PORT),
       username: process.env.PG_USER,
       password: process.env.PG_PASS,
       database: process.env.PG_DB,
@@ -26,4 +26,4 @@ import { PollModule } from './poll/poll.module';
     PollModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
