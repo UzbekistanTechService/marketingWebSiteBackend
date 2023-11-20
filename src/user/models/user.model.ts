@@ -38,13 +38,11 @@ export class User extends Model<User, UserAttributes> {
   @Column({
     type: DataType.STRING,
     allowNull: true,
-    unique: true,
   })
   full_name: string;
 
   @Column({
     type: DataType.ENUM('local', 'google'),
-    allowNull: false,
   })
   provider: ProviderType;
 }

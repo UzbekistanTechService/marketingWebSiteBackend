@@ -2,14 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { InjectModel } from '@nestjs/sequelize';
 import { ProviderType, User } from 'src/user/models/user.model';
 import { IGoggleProfile } from 'src/user/dto/user.dto';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(
-    @InjectModel(User) private userRepository: typeof User,
     configService: ConfigService,
   ) {
     super({
