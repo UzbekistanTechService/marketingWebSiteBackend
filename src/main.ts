@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import { setupAdminPanel } from 'src/admin-bro/admin-bro.options'
 
 async function runApp() {
   try {
@@ -20,6 +21,7 @@ async function runApp() {
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/', app, document);
+    await setupAdminPanel(app);
     await app.listen(PORT, () => {
       console.log('Server listening on port', +PORT);
     });
