@@ -9,11 +9,12 @@ import {
 } from '@nestjs/common';
 import { PollService } from './poll.service';
 import { CreatePollDto } from './dto/poll.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('poll')
 @Controller('poll')
 export class PollController {
-  constructor(private readonly pollService: PollService) {}
+  constructor(private readonly pollService: PollService) { }
 
   @Post('create')
   create(@Body() createPollDto: CreatePollDto) {

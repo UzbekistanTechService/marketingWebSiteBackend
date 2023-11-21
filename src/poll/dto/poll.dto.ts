@@ -1,6 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
-import { PollServiceType } from "../models/poll.model";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+import { PollServiceType } from '../models/poll.model';
 
 export class CreatePollDto {
   @ApiProperty({
@@ -24,7 +30,7 @@ export class CreatePollDto {
   @ApiProperty({
     type: 'enum',
     enum: PollServiceType,
-    example:'smm',
+    example: 'smm',
   })
   @IsNotEmpty()
   @IsEnum(PollServiceType)

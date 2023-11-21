@@ -8,6 +8,8 @@ import { Response } from 'express';
 import { SignupDto } from './dto/signupdto';
 import { SigninDto } from './dto/signin.dto';
 import { MailService } from 'src/mail/mail.service';
+import { EmailDto } from './dto/email.dto';
+import { forgotPasswordDto } from './dto/forgot-password.dto';
 
 @Injectable()
 export class UserService {
@@ -40,12 +42,11 @@ export class UserService {
         );
         return {
           status: 201,
-          message: 'user created',
+          message: 'User signed in successfully',
           data: user,
           token,
         };
       }
-
       const token = await this.jwtService.signAsync(
         { id: exist.id },
         {
@@ -55,7 +56,7 @@ export class UserService {
       );
       return {
         status: 200,
-        message: 'successfully signed',
+        message: 'User signed in successfully',
         data: exist,
         token,
       };
@@ -80,7 +81,6 @@ export class UserService {
       });
       const jwt_payload = { id: user.id };
       const token = await this.generateToken(jwt_payload);
-      await this.mailService.sendUserConfirmation(user, token.access_token);
       this.writeToCookie(token.refresh_token, res);
       return {
         message: 'User registreted successfully',
@@ -97,11 +97,11 @@ export class UserService {
       const { email, password } = signinDto;
       const user = await this.userRepository.findOne({ where: { email } });
       if (!user) {
-        return { message: 'User not found!' };
+        return { message: 'Email or password wrong!' };
       }
       const is_match = await compare(password, user.hashed_password);
       if (!is_match) {
-        return { message: 'Invalid password!' };
+        return { message: 'Email or password wrong!' };
       }
       const jwt_payload = { id: user.id };
       const token = await this.generateToken(jwt_payload);
@@ -132,6 +132,50 @@ export class UserService {
       }
       res.clearCookie('refresh_token');
       return { message: 'User logged out successfully', user };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async sendToEmail(emailDto: EmailDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email: emailDto.email },
+      });
+      if (!user) {
+        return { message: 'User not found!' };
+      }
+      const token = await this.jwtService.signAsync(
+        { id: user.id },
+        {
+          secret: process.env.GOOGLE_TOKEN_KEY,
+          expiresIn: process.env.GOOGLE_TOKEN_TIME,
+        },
+      );
+      await this.mailService.sendUserConfirmation(user, token);
+      return { message: "A confirmation link has been sent to your email", user, token };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async forgotPassword(forgotPasswordDto: forgotPasswordDto) {
+    try {
+      const { email, token, new_password, confirm_new_password } = forgotPasswordDto;
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) {
+        return { message: "User not found!" };
+      }
+      const check = await this.jwtService.verify(token, { secret: process.env.GOOGLE_TOKEN_KEY });
+      if (!check || user.id != check.id) {
+        return { message: "Unauthorizated!" };
+      }
+      if (new_password != confirm_new_password) {
+        return { message: "Password confirmation error!" }
+      }
+      const hashed_password = await hash(confirm_new_password, 7);
+      const updated = await this.userRepository.update({ hashed_password }, { where: { email }, returning: true });
+      return { message: "Password changed successfully", user: updated[1][0] };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

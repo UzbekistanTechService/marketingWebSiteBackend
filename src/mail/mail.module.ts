@@ -11,18 +11,19 @@ import { ConfigService } from '@nestjs/config';
       useFactory: async (config: ConfigService) => ({
         transport: {
           host: config.get('MAILER_HOST'),
-          secure: false,
+          secure: true,
           auth: {
             user: config.get('MAILDEV_USER'),
             pass: config.get('MAILDEV_PASS'),
           },
         },
         defaults: {
-          from: `"No Reply" <${config.get('MAILDEV_USER')}>`,
+          from: `"Main Stream" ${config.get('MAILDEV_USER')}`,
         },
         template: {
-          dir: __dirname + 'templates',
+          dir: join(__dirname, 'templates'),
           adapter: new HandlebarsAdapter(),
+          template: 'confirmation',
           options: {
             strict: true,
           },
@@ -34,4 +35,4 @@ import { ConfigService } from '@nestjs/config';
   providers: [MailService],
   exports: [MailService],
 })
-export class MailModule { }
+export class MailModule {}
