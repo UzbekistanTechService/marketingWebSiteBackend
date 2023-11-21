@@ -1,4 +1,10 @@
-import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Course } from 'src/course/models/course.model';
 
 interface VideoAttributes {
