@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) { }
+  ) {}
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -153,7 +153,11 @@ export class UserService {
         },
       );
       await this.mailService.sendUserConfirmation(user, token);
-      return { message: "A confirmation link has been sent to your email", user, token };
+      return {
+        message: 'A confirmation link has been sent to your email',
+        user,
+        token,
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -161,21 +165,27 @@ export class UserService {
 
   async forgotPassword(forgotPasswordDto: forgotPasswordDto) {
     try {
-      const { email, token, new_password, confirm_new_password } = forgotPasswordDto;
+      const { email, token, new_password, confirm_new_password } =
+        forgotPasswordDto;
       const user = await this.userRepository.findOne({ where: { email } });
       if (!user) {
-        return { message: "User not found!" };
+        return { message: 'User not found!' };
       }
-      const check = await this.jwtService.verify(token, { secret: process.env.GOOGLE_TOKEN_KEY });
+      const check = await this.jwtService.verify(token, {
+        secret: process.env.GOOGLE_TOKEN_KEY,
+      });
       if (!check || user.id != check.id) {
-        return { message: "Unauthorizated!" };
+        return { message: 'Unauthorizated!' };
       }
       if (new_password != confirm_new_password) {
-        return { message: "Password confirmation error!" }
+        return { message: 'Password confirmation error!' };
       }
       const hashed_password = await hash(confirm_new_password, 7);
-      const updated = await this.userRepository.update({ hashed_password }, { where: { email }, returning: true });
-      return { message: "Password changed successfully", user: updated[1][0] };
+      const updated = await this.userRepository.update(
+        { hashed_password },
+        { where: { email }, returning: true },
+      );
+      return { message: 'Password changed successfully', user: updated[1][0] };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

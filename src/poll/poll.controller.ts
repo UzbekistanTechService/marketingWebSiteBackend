@@ -14,7 +14,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 @ApiTags('poll')
 @Controller('poll')
 export class PollController {
-  constructor(private readonly pollService: PollService) { }
+  constructor(private readonly pollService: PollService) {}
 
   @Post('create')
   create(@Body() createPollDto: CreatePollDto) {

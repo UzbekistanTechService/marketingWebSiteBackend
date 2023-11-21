@@ -4,6 +4,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { UserModule } from './user/user.module';
 import { MailModule } from './mail/mail.module';
 import { PollModule } from './poll/poll.module';
+import { CourseModule } from './course/course.module';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { PollModule } from './poll/poll.module';
     UserModule,
     MailModule,
     PollModule,
+    CourseModule,
+    VideoModule,
   ],
 })
 export class AppModule {}

@@ -21,12 +21,12 @@ import { forgotPasswordDto } from './dto/forgot-password.dto';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @HttpCode(200)
   @UseGuards(GoogleOauthGuard)
   @Get('google')
-  authGoogle() { }
+  authGoogle() {}
 
   @HttpCode(200)
   @Get('google/callback')
