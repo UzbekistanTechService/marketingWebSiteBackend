@@ -13,9 +13,6 @@ export enum PollServiceType {
 
 @Table({ tableName: 'poll' })
 export class Poll extends Model<Poll, PollAttributes> {
-  static find() {
-    throw new Error('Method not implemented.');
-  }
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
