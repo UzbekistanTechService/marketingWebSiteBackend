@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePollDto } from './dto/create-poll.dto';
-import { UpdatePollDto } from './dto/update-poll.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreatePollDto } from './dto/poll.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { Poll } from './models/poll.model';
 
 @Injectable()
 export class PollService {
-  create(createPollDto: CreatePollDto) {
-    return 'This action adds a new poll';
+  constructor(
+    @InjectModel(Poll) private readonly pollRepository: typeof Poll,
+  ) {}
+  async create(createPollDto: CreatePollDto) {
+    try {
+      const poll = await this.pollRepository.create({
+        name: createPollDto.name,
+        phone_number: createPollDto.phone_number,
+        service: createPollDto.service,
+      });
+
+      return {
+        status: 201,
+        message: 'Poll successfully created',
+        data: poll,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all poll`;
+  async findAll() {
+    try {
+      const polls = await this.pollRepository.findAll();
+      return {
+        status: 200,
+        message: 'Return all polls',
+        data: polls,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} poll`;
-  }
+  async findOne(id: string) {
+    try {
+      const poll = await this.pollRepository.findOne({ where: { id } });
 
-  update(id: number, updatePollDto: UpdatePollDto) {
-    return `This action updates a #${id} poll`;
-  }
+      if (!poll) {
+        return {
+          status: 404,
+          message: 'Poll with this id was not found!',
+        };
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} poll`;
+      return {
+        status: 200,
+        message: 'Return all polls',
+        data: poll,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
