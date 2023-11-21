@@ -35,7 +35,7 @@ export class Course extends Model<Course, CourseAttributes> {
 
   @HasMany(() => Video, {
     onDelete: 'CASCADE',
-    hooks: true
+    hooks: true,
   })
   videos: Video[];
 }

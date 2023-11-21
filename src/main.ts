@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
-import { setupAdminPanel } from 'src/admin-bro/admin-bro.options'
+import { setupAdminPanel } from 'src/admin-bro/admin-bro.options';
 
 async function runApp() {
   try {

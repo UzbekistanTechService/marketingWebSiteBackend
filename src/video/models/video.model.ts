@@ -26,7 +26,7 @@ export class Video extends Model<Video, VideoAttributes> {
     type: DataType.STRING,
   })
   file: string;
-  
+
   @Column({
     type: DataType.INTEGER,
   })
