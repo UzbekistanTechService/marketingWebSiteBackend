@@ -1,7 +1,6 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface UserAttributes {
-  id: string;
   email: string;
   hashed_password: string;
   full_name: string;
@@ -16,11 +15,11 @@ export enum ProviderType {
 @Table({ tableName: 'user' })
 export class User extends Model<User, UserAttributes> {
   @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    type: DataType.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   })
-  id: string;
+  id: number;
 
   @Column({
     type: DataType.STRING,
