@@ -9,7 +9,7 @@ import { Course } from 'src/course/models/course.model';
 
 interface VideoAttributes {
   file: string;
-  course_id: string;
+  course_id: number;
 }
 
 @Table({ tableName: 'video' })
@@ -26,11 +26,16 @@ export class Video extends Model<Video, VideoAttributes> {
     type: DataType.STRING,
   })
   file: string;
+  
+  @Column({
+    type: DataType.INTEGER,
+  })
+  video_number: number;
 
   @ForeignKey(() => Course)
   @Column({
     allowNull: false,
     type: DataType.INTEGER,
   })
-  course_id: string;
+  course_id: number;
 }
