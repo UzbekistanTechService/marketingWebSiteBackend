@@ -18,12 +18,11 @@ const ADMIN = {
 export async function setupAdminPanel(app: INestApplication): Promise<void> {
   AdminBro.registerAdapter({ Database, Resource });
 
-  // const file_name = v4() + '.jpg';
-  // const file_path = resolve(__dirname, '..', 'static');
-  // if (!existsSync(file_path)) {
-  //   mkdirSync(file_path, { recursive: true });
-  // }
-  // writeFileSync(join(file_path, file_name), file.buffer);
+  const file_name = v4() + '.jpg';
+  const file_path = resolve(__dirname, '..', 'static');
+  if (!existsSync(file_path)) {
+    mkdirSync(file_path, { recursive: true });
+  }
 
   const adminBro = new AdminBro({
     resources: [
@@ -35,24 +34,14 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
       },
       {
         resource: Video,
-        options: {
-          listProperties: ['fileUrl', 'mimeType'],
-        },
-        features: [
-          uploadFeature({
-            provider: {
-              aws: {
-                bucket: 'images',
-                region: 'us-east-1',
-                accessKeyId: 'AKIA3HGEHPPYIAYEUL56',
-                secretAccessKey: '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',
-              },
-            },
-            properties: {
-              key: 'file_path',
-            },
-          }),
-        ],
+        features: [uploadFeature({
+          provider: { local: { bucket: file_path } },
+          properties: {
+            key: file_name,
+            mimeType: 'jpg'
+          },
+          uploadPath: (record, filename) => file_path,
+        })],
       },
     ],
     rootPath: '/admin',
