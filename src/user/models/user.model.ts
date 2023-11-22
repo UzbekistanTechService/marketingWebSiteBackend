@@ -1,6 +1,7 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface UserAttributes {
+  id: number;
   email: string;
   hashed_password: string;
   full_name: string;

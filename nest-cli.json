@@ -6,6 +6,6 @@
     "assets": [
       "mail/templates/*.hbs"
     ],
-    "deleteOutDir": true
+    "watchAssets": true
   }
 }
