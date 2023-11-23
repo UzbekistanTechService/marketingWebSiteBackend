@@ -6,9 +6,10 @@ import { User } from '../user/models/user.model';
 import { Course } from '../course/models/course.model';
 import { Video } from '../video/models/video.model';
 import uploadFeature from '@admin-bro/upload';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { v4 } from 'uuid';
+import { LocalProvider } from './local.provider';
 
 const ADMIN = {
   email: 'uts@gmail.com',
@@ -24,6 +25,8 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
     mkdirSync(file_path, { recursive: true });
   }
 
+  const localProvider = new LocalProvider(file_path, file_name);
+
   const adminBro = new AdminBro({
     resources: [
       {
@@ -34,14 +37,15 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
       },
       {
         resource: Video,
-        features: [uploadFeature({
-          provider: { local: { bucket: file_path } },
-          properties: {
-            key: file_name,
-            mimeType: 'jpg'
-          },
-          uploadPath: (record, filename) => file_path,
-        })],
+        features: [
+          uploadFeature({
+            provider: localProvider,
+            properties: {
+              key: file_name,
+              mimeType: 'mime',
+            },
+          }),
+        ],
       },
     ],
     rootPath: '/admin',
