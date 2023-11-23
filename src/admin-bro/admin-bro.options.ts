@@ -19,13 +19,15 @@ const ADMIN = {
 export async function setupAdminPanel(app: INestApplication): Promise<void> {
   AdminBro.registerAdapter({ Database, Resource });
 
-  const file_name = v4() + '.jpg';
-  const file_path = resolve(__dirname, '..', 'static');
-  if (!existsSync(file_path)) {
-    mkdirSync(file_path, { recursive: true });
-  }
+  // const file_name = v4() + '.jpg';
+  const file_path = resolve(__dirname, '../..', 'uploads');
+  console.log(file_path);
+  
+  // if (!existsSync(file_path)) {
+  //   mkdirSync(file_path, { recursive: true });
+  // }
 
-  const localProvider = new LocalProvider(file_path, file_name);
+  const localProvider = new LocalProvider(file_path, 'uploads');
 
   const adminBro = new AdminBro({
     resources: [
@@ -41,8 +43,7 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
           uploadFeature({
             provider: localProvider,
             properties: {
-              key: file_name,
-              mimeType: 'mime',
+              key: 'file_name',
             },
           }),
         ],

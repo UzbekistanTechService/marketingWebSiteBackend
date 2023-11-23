@@ -2,10 +2,10 @@ import { BaseProvider } from '@admin-bro/upload';
 import { ActionContext, UploadedFile } from 'admin-bro';
 import { promises, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
-
 export class LocalProvider extends BaseProvider {
   assetPath: string;
   constructor(bucket: string, assetPath: string) {
+    // it requires bucket as a parameter to properly pass it to other methods
     super(bucket);
 
     this.assetPath = assetPath;
@@ -18,7 +18,8 @@ export class LocalProvider extends BaseProvider {
   ): Promise<any> {
     const fullPath = resolve(this.assetPath, key);
     const dirPath = dirname(fullPath);
-
+    console.log(fullPath);
+    
     if (!existsSync(dirPath)) {
       await promises.mkdir(dirPath, { recursive: true });
     }
