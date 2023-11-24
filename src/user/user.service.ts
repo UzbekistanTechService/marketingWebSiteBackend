@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -186,6 +186,56 @@ export class UserService {
         { where: { email }, returning: true },
       );
       return { message: 'Password changed successfully', user: updated[1][0] };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getAll() {
+    try {
+      const users = await this.userRepository.findAll();
+      return users;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async pagination(page_limit: string) {
+    try {
+      const page = Number(page_limit.split('')[0]);
+      const limit = Number(page_limit.split('')[1]);
+      const offset = (page - 1) * limit;
+      const users = await this.userRepository.findAll({
+        include: { all: true },
+        offset,
+        limit,
+      });
+      const total_count = await this.userRepository.count();
+      const total_pages = Math.ceil(total_count / limit);
+      const response = {
+        status: 200,
+        data: {
+          records: users,
+          pagination: {
+            currentPage: page,
+            total_pages,
+            total_count,
+          },
+        },
+      };
+      return response;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getById(id: number) {
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        return { message: "User not found!" };
+      }
+      return user;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

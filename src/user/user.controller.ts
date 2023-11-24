@@ -7,6 +7,7 @@ import {
   Body,
   Res,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GoogleOauthGuard } from 'src/guard/google-oauth.guard';
@@ -21,12 +22,12 @@ import { forgotPasswordDto } from './dto/forgot-password.dto';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @HttpCode(200)
   @UseGuards(GoogleOauthGuard)
   @Get('google')
-  authGoogle() {}
+  authGoogle() { }
 
   @HttpCode(200)
   @Get('google/callback')
@@ -72,5 +73,23 @@ export class UserController {
   @Post('forgot_password')
   forgotPassword(@Body() forgotPasswordDto: forgotPasswordDto) {
     return this.userService.forgotPassword(forgotPasswordDto);
+  }
+
+  @ApiOperation({ summary: 'Get all users' })
+  @Get()
+  getAll() {
+    return this.userService.getAll();
+  }
+
+  @ApiOperation({ summary: 'Get users with pagination' })
+  @Get('page/:page_limit')
+  pagination(@Param('page_limit') page_limit: string) {
+    return this.userService.pagination(page_limit);
+  }
+
+  @ApiOperation({ summary: 'Get user by id' })
+  @Get(':id')
+  getById(@Param('id') id: number) {
+    return this.userService.getById(id);
   }
 }
