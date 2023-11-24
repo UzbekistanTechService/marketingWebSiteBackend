@@ -6,9 +6,14 @@ import { MailModule } from './mail/mail.module';
 import { PollModule } from './poll/poll.module';
 import { CourseModule } from './course/course.module';
 import { VideoModule } from './video/video.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { resolve } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: resolve(__dirname, 'static'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

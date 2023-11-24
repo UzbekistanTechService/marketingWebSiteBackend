@@ -18,8 +18,6 @@ export class LocalProvider extends BaseProvider {
   ): Promise<any> {
     const fullPath = resolve(this.assetPath, key);
     const dirPath = dirname(fullPath);
-    console.log(fullPath);
-    
     if (!existsSync(dirPath)) {
       await promises.mkdir(dirPath, { recursive: true });
     }

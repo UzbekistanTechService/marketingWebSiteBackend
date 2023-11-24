@@ -7,8 +7,7 @@ import { Course } from '../course/models/course.model';
 import { Video } from '../video/models/video.model';
 import uploadFeature from '@admin-bro/upload';
 import { resolve } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { v4 } from 'uuid';
+import { existsSync, mkdirSync } from 'fs';
 import { LocalProvider } from './local.provider';
 import { Poll } from 'src/poll/models/poll.model';
 
@@ -20,13 +19,12 @@ const ADMIN = {
 export async function setupAdminPanel(app: INestApplication): Promise<void> {
   AdminBro.registerAdapter({ Database, Resource });
 
-  
-  const file_path = resolve(__dirname, '../..', 'files');
+  const file_path = resolve(__dirname, '..', 'static');
   if (!existsSync(file_path)) {
     mkdirSync(file_path, { recursive: true });
   }
 
-  const localProvider = new LocalProvider(file_path, 'files');
+  const localProvider = new LocalProvider(file_path, resolve('dist', 'static'));
 
   const adminBro = new AdminBro({
     resources: [
