@@ -24,7 +24,6 @@ export class Video extends Model<Video, VideoAttributes> {
   id: number;
 
   @Column({
-    allowNull: false,
     type: DataType.STRING,
   })
   file_name: string;

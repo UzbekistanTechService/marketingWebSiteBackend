@@ -10,6 +10,7 @@ import { resolve } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { v4 } from 'uuid';
 import { LocalProvider } from './local.provider';
+import { Poll } from 'src/poll/models/poll.model';
 
 const ADMIN = {
   email: 'uts@gmail.com',
@@ -19,15 +20,13 @@ const ADMIN = {
 export async function setupAdminPanel(app: INestApplication): Promise<void> {
   AdminBro.registerAdapter({ Database, Resource });
 
-  // const file_name = v4() + '.jpg';
-  const file_path = resolve(__dirname, '../..', 'uploads');
-  console.log(file_path);
   
-  // if (!existsSync(file_path)) {
-  //   mkdirSync(file_path, { recursive: true });
-  // }
+  const file_path = resolve(__dirname, '../..', 'files');
+  if (!existsSync(file_path)) {
+    mkdirSync(file_path, { recursive: true });
+  }
 
-  const localProvider = new LocalProvider(file_path, 'uploads');
+  const localProvider = new LocalProvider(file_path, 'files');
 
   const adminBro = new AdminBro({
     resources: [
@@ -36,6 +35,9 @@ export async function setupAdminPanel(app: INestApplication): Promise<void> {
       },
       {
         resource: Course,
+      },
+      {
+        resource: Poll,
       },
       {
         resource: Video,
