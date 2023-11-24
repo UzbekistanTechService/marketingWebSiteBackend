@@ -33,8 +33,8 @@ export class CourseService {
 
   async pagination(page_limit: string) {
     try {
-      const page = Number(page_limit.split('')[0]);
-      const limit = Number(page_limit.split('')[1]);
+      const page = Number(page_limit.split('-')[0]);
+      const limit = Number(page_limit.split('-')[1]);
       const offset = (page - 1) * limit;
       const courses = await this.courseRepository.findAll({
         include: { all: true },
