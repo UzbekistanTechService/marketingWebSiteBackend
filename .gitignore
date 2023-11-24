@@ -3,6 +3,10 @@
 /node_modules
 .env
 .adminbro
+/files
+/static
+/public
+/uploads
 
 # Logs
 logs
