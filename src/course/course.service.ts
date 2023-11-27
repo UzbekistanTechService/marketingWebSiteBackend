@@ -17,20 +17,6 @@ export class CourseService {
     }
   }
 
-  async getById(id: number) {
-    try {
-      const course = await this.courseRepository.findByPk(id, {
-        include: { all: true },
-      });
-      if (!course) {
-        return { message: 'Course not found!' };
-      }
-      return course;
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-
   async pagination(page_limit: string) {
     try {
       const page = Number(page_limit.split('-')[0]);
@@ -55,6 +41,20 @@ export class CourseService {
         },
       };
       return response;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getByID(id: number) {
+    try {
+      const course = await this.courseRepository.findByPk(id, {
+        include: { all: true },
+      });
+      if (!course) {
+        return { message: 'Course not found!' };
+      }
+      return course;
     } catch (error) {
       throw new BadRequestException(error.message);
     }

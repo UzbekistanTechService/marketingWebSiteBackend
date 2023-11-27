@@ -13,15 +13,15 @@ export class CourseController {
     return this.courseService.getAll();
   }
 
-  @ApiOperation({ summary: 'Get course by id' })
-  @Get(':id')
-  getById(@Param('id') id: number) {
-    return this.courseService.getById(id);
-  }
-
   @ApiOperation({ summary: 'Get courses with pagination' })
   @Get('pagination/:page-limit')
   pagination(@Query('page-limit') page_limit: string) {
     return this.courseService.pagination(page_limit);
+  }
+
+  @ApiOperation({ summary: 'Get course by id' })
+  @Get(':id')
+  getById(@Param('id') id: number) {
+    return this.courseService.getByID(id);
   }
 }

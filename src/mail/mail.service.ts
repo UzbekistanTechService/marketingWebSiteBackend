@@ -7,7 +7,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: User, token: string) {
-    const url = `https://front-seven-delta.vercel.app/?token=${token}`;
+    const url = `https://front-seven-delta.vercel.app/password-recovery/?token=${token}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Welcome to Nice App! Confirm your Email',

@@ -90,6 +90,6 @@ export class UserController {
   @ApiOperation({ summary: 'Get user by id' })
   @Get(':id')
   getById(@Param('id') id: number) {
-    return this.userService.getById(id);
+    return this.userService.getByID(id);
   }
 }

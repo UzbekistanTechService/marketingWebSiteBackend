@@ -26,7 +26,7 @@ export class PollService {
     }
   }
 
-  async findAll() {
+  async getAll() {
     try {
       const polls = await this.pollRepository.findAll();
       return {
@@ -39,7 +39,36 @@ export class PollService {
     }
   }
 
-  async findOne(id: string) {
+  async pagination(page_limit: string) {
+    try {
+      const page = Number(page_limit.split('-')[0]);
+      const limit = Number(page_limit.split('-')[1]);
+      const offset = (page - 1) * limit;
+      const polls = await this.pollRepository.findAll({
+        include: { all: true },
+        offset,
+        limit,
+      });
+      const total_count = await this.pollRepository.count();
+      const total_pages = Math.ceil(total_count / limit);
+      const response = {
+        status: 200,
+        data: {
+          records: polls,
+          pagination: {
+            currentPage: page,
+            total_pages,
+            total_count,
+          },
+        },
+      };
+      return response;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getByID(id: string) {
     try {
       const poll = await this.pollRepository.findOne({ where: { id } });
 

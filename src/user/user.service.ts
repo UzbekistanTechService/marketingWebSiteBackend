@@ -229,7 +229,7 @@ export class UserService {
     }
   }
 
-  async getById(id: number) {
+  async getByID(id: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {

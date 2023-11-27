@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { PollService } from './poll.service';
 import { CreatePollDto } from './dto/poll.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -16,6 +8,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class PollController {
   constructor(private readonly pollService: PollService) {}
 
+  @ApiOperation({ summary: 'Sebd poll service' })
   @Post('create')
   create(@Body() createPollDto: CreatePollDto) {
     return this.pollService.create(createPollDto);
@@ -24,12 +17,18 @@ export class PollController {
   @ApiOperation({ summary: 'Get all polls' })
   @Get('all')
   findAll() {
-    return this.pollService.findAll();
+    return this.pollService.getAll();
+  }
+
+  @ApiOperation({ summary: 'Get polls with pagination' })
+  @Get('pagination/:page-limit')
+  pagination(@Query('page-limit') page_limit: string) {
+    return this.pollService.pagination(page_limit);
   }
 
   @ApiOperation({ summary: 'Get poll by id' })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.pollService.findOne(id);
+    return this.pollService.getByID(id);
   }
 }
