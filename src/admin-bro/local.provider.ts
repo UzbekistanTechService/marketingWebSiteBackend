@@ -1,21 +1,15 @@
 import { BaseProvider } from '@admin-bro/upload';
-import { ActionContext, UploadedFile } from 'admin-bro';
+import { UploadedFile } from 'admin-bro';
 import { promises, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 export class LocalProvider extends BaseProvider {
   assetPath: string;
   constructor(bucket: string, assetPath: string) {
-    // it requires bucket as a parameter to properly pass it to other methods
     super(bucket);
-
     this.assetPath = assetPath;
   }
 
-  async upload(
-    file: UploadedFile,
-    key: string,
-    context: ActionContext,
-  ): Promise<any> {
+  async upload(file: UploadedFile, key: string): Promise<any> {
     const fullPath = resolve(this.assetPath, key);
     const dirPath = dirname(fullPath);
     if (!existsSync(dirPath)) {
@@ -26,11 +20,7 @@ export class LocalProvider extends BaseProvider {
     return key;
   }
 
-  async delete(
-    key: string,
-    bucket: string,
-    context: ActionContext,
-  ): Promise<any> {
+  async delete(key: string): Promise<any> {
     const filePath = resolve(this.assetPath, key);
 
     if (existsSync(filePath)) {
@@ -43,11 +33,7 @@ export class LocalProvider extends BaseProvider {
     }
   }
 
-  path(
-    key: string,
-    bucket: string,
-    context: ActionContext,
-  ): Promise<string> | string {
+  path(bucket: string): Promise<string> | string {
     return '/' + bucket;
   }
 }

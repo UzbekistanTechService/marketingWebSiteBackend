@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) { }
+  ) {}
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -233,7 +233,7 @@ export class UserService {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        return { message: "User not found!" };
+        return { message: 'User not found!' };
       }
       return user;
     } catch (error) {
