@@ -1,7 +1,6 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 interface PollAttributes {
-  id: string;
   phone_number: string;
   name: string;
   service: PollServiceType;
@@ -14,8 +13,8 @@ export enum PollServiceType {
 @Table({ tableName: 'poll' })
 export class Poll extends Model<Poll, PollAttributes> {
   @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
+    type: DataType.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   })
   id: string;

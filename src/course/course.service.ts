@@ -30,14 +30,11 @@ export class CourseService {
       const total_count = await this.courseRepository.count();
       const total_pages = Math.ceil(total_count / limit);
       const response = {
-        status: 200,
-        data: {
-          records: courses,
-          pagination: {
-            currentPage: page,
-            total_pages,
-            total_count,
-          },
+        courses,
+        pagination: {
+          currentPage: page,
+          total_pages,
+          total_count,
         },
       };
       return response;
@@ -52,7 +49,9 @@ export class CourseService {
         include: { all: true },
       });
       if (!course) {
-        return { message: 'Course not found!' };
+        return {
+          message: 'Course not found!',
+        };
       }
       return course;
     } catch (error) {

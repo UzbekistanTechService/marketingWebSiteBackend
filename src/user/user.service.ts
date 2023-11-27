@@ -41,7 +41,6 @@ export class UserService {
           },
         );
         return {
-          status: 201,
           message: 'User signed in successfully',
           data: user,
           token,
@@ -55,7 +54,6 @@ export class UserService {
         },
       );
       return {
-        status: 200,
         message: 'User signed in successfully',
         data: exist,
         token,
@@ -213,14 +211,11 @@ export class UserService {
       const total_count = await this.userRepository.count();
       const total_pages = Math.ceil(total_count / limit);
       const response = {
-        status: 200,
-        data: {
-          records: users,
-          pagination: {
-            currentPage: page,
-            total_pages,
-            total_count,
-          },
+        users,
+        pagination: {
+          currentPage: page,
+          total_pages,
+          total_count,
         },
       };
       return response;

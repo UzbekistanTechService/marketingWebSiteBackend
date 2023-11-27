@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -44,4 +45,7 @@ export class Video extends Model<Video, VideoAttributes> {
     type: DataType.INTEGER,
   })
   course_id: number;
+
+  @BelongsTo(() => Course)
+  course: Course;
 }

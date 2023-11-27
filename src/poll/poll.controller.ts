@@ -15,7 +15,7 @@ export class PollController {
   }
 
   @ApiOperation({ summary: 'Get all polls' })
-  @Get('all')
+  @Get()
   findAll() {
     return this.pollService.getAll();
   }

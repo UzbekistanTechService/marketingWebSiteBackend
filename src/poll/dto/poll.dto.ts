@@ -23,7 +23,7 @@ export class CreatePollDto {
   })
   @IsString()
   @IsNotEmpty()
-  @MinLength(5)
+  @MinLength(3)
   @MaxLength(50)
   name: string;
 

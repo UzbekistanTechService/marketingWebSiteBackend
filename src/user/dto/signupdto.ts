@@ -32,7 +32,7 @@ export class SignupDto {
   })
   @IsNotEmpty()
   @IsString()
-  @MinLength(5)
+  @MinLength(3)
   @MaxLength(50)
   full_name: string;
 }
