@@ -8,6 +8,8 @@ import { CourseModule } from './course/course.module';
 import { VideoModule } from './video/video.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { join } from 'path';
     PollModule,
     CourseModule,
     VideoModule,
+    CartModule,
+    OrderModule,
   ],
 })
 export class AppModule {}
