@@ -8,5 +8,6 @@ import { Course } from './models/course.model';
   imports: [SequelizeModule.forFeature([Course])],
   controllers: [CourseController],
   providers: [CourseService],
+  exports: [CourseService]
 })
 export class CourseModule {}
