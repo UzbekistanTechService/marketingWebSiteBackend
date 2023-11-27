@@ -1,4 +1,11 @@
-import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Course } from 'src/course/models/course.model';
 import { User } from 'src/user/models/user.model';
 
@@ -23,7 +30,7 @@ export class Cart extends Model<Cart, CartAttributes> {
     type: DataType.INTEGER,
   })
   user_id: number;
-  
+
   @ForeignKey(() => Course)
   @Column({
     allowNull: false,
