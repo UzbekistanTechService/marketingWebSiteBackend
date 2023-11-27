@@ -7,12 +7,13 @@ import { PollModule } from './poll/poll.module';
 import { CourseModule } from './course/course.module';
 import { VideoModule } from './video/video.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { resolve } from 'path';
+import { join } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: resolve(__dirname, 'static'),
+      rootPath: join(__dirname, 'static'),
+      serveRoot: '/static/',
     }),
     ConfigModule.forRoot({
       isGlobal: true,
