@@ -7,8 +7,8 @@ import { UserModule } from 'src/user/user.module';
 import { CourseModule } from 'src/course/course.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Order]), UserModule, CourseModule,],
+  imports: [SequelizeModule.forFeature([Order]), UserModule, CourseModule],
   controllers: [OrderController],
   providers: [OrderService],
 })
-export class OrderModule { }
+export class OrderModule {}
