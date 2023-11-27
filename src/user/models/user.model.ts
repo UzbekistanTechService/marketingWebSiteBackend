@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
+import { Cart } from 'src/cart/models/cart.model';
+import { Order } from 'src/order/models/order.model';
 
 interface UserAttributes {
   id: number;
@@ -45,4 +47,16 @@ export class User extends Model<User, UserAttributes> {
     type: DataType.ENUM('local', 'google'),
   })
   provider: ProviderType;
+
+  @HasMany(()=> Cart, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  carts: Cart[];
+
+  @HasMany(()=> Order, {
+    onDelete: 'CASCADE',
+    hooks: true,
+  })
+  orders: Order;
 }
