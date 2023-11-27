@@ -48,13 +48,13 @@ export class User extends Model<User, UserAttributes> {
   })
   provider: ProviderType;
 
-  @HasMany(()=> Cart, {
+  @HasMany(() => Cart, {
     onDelete: 'CASCADE',
     hooks: true,
   })
   carts: Cart[];
 
-  @HasMany(()=> Order, {
+  @HasMany(() => Order, {
     onDelete: 'CASCADE',
     hooks: true,
   })
