@@ -33,7 +33,7 @@ export class Order extends Model<Order, OrderAttributes> {
   @Column({
     type: DataType.INTEGER,
   })
-  course_Id: number;
+  course_id: number;
 
   @BelongsTo(() => User)
   user: User;

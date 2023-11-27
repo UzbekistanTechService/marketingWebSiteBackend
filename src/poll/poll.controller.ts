@@ -8,7 +8,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class PollController {
   constructor(private readonly pollService: PollService) {}
 
-  @ApiOperation({ summary: 'Sebd poll service' })
+  @ApiOperation({ summary: 'Send poll service' })
   @Post('create')
   create(@Body() createPollDto: CreatePollDto) {
     return this.pollService.create(createPollDto);

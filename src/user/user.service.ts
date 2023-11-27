@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ProviderType, User } from './models/user.model';
 import { IGoggleProfile } from './dto/user.dto';
@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -163,17 +163,13 @@ export class UserService {
 
   async forgotPassword(forgotPasswordDto: forgotPasswordDto) {
     try {
-      const { email, token, new_password, confirm_new_password } =
-        forgotPasswordDto;
-      const user = await this.userRepository.findOne({ where: { email } });
-      if (!user) {
-        return { message: 'User not found!' };
-      }
+      const { token, new_password, confirm_new_password } = forgotPasswordDto;
       const check = await this.jwtService.verify(token, {
         secret: process.env.GOOGLE_TOKEN_KEY,
       });
-      if (!check || user.id != check.id) {
-        return { message: 'Unauthorizated!' };
+      const user = await this.userRepository.findOne({ where: { id: check.id } });
+      if (!user) {
+        return { message: 'Unauthorizated!', statusCode: HttpStatus.UNAUTHORIZED, };
       }
       if (new_password != confirm_new_password) {
         return { message: 'Password confirmation error!' };
@@ -181,7 +177,7 @@ export class UserService {
       const hashed_password = await hash(confirm_new_password, 7);
       const updated = await this.userRepository.update(
         { hashed_password },
-        { where: { email }, returning: true },
+        { where: { id: user.id }, returning: true },
       );
       return { message: 'Password changed successfully', user: updated[1][0] };
     } catch (error) {

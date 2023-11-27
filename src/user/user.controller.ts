@@ -82,8 +82,8 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Get users with pagination' })
-  @Get('page/:page_limit')
-  pagination(@Param('page_limit') page_limit: string) {
+  @Get('pagination/:page-limit')
+  pagination(@Param('page-limit') page_limit: string) {
     return this.userService.pagination(page_limit);
   }
 
