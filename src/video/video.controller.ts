@@ -36,8 +36,8 @@ export class VideoController {
   }
 
   @ApiOperation({ summary: 'Get videos with pagination' })
-  @Get('page')
-  pagination(@Query('page_limit') page_limit: string) {
+  @Get('pagination/:page-limit')
+  pagination(@Query('page-limit') page_limit: string) {
     return this.videoService.pagination(page_limit);
   }
 
