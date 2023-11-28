@@ -18,10 +18,11 @@ export class CartService {
       const { user_id, course_id } = cartDto;
       await this.userService.getByID(user_id);
       await this.courseService.getByID(course_id);
-      const exist = await this.getOne(`${user_id}-${course_id}`);
+      const exist = await this.getOne(user_id + '-' + course_id);
       if (exist) {
         return { message: 'Already exist cart!' };
       }
+      console.log(exist, `${user_id}-${course_id}`);
       const cart = await this.cartRepository.create(cartDto);
       return cart;
     } catch (error) {
@@ -61,8 +62,7 @@ export class CartService {
 
   async getOne(ids: string) {
     try {
-      const user_id = Number(ids.split('-'))[0];
-      const course_id = Number(ids.split('-'))[1];
+      const [user_id, course_id] = ids.split('-');
       const cart = await this.cartRepository.findOne({
         where: {
           [Op.and]: [{ user_id }, { course_id }],
