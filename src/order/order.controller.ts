@@ -46,6 +46,12 @@ export class OrderController {
     return this.orderService.getByID(id);
   }
 
+  @ApiOperation({ summary: 'Get order by ID' })
+  @Get('userId/:userId')
+  getByUserID(@Param('userId') user_id: number) {
+    return this.orderService.getByUserID(user_id);
+  }
+
   @ApiOperation({ summary: 'Delete order' })
   @Delete(':id')
   delete(@Param('id') id: number) {

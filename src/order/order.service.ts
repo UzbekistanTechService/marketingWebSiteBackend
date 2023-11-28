@@ -12,7 +12,7 @@ export class OrderService {
     @InjectModel(Order) private orderRepository: typeof Order,
     private readonly userService: UserService,
     private readonly courseService: CourseService,
-  ) {}
+  ) { }
 
   async create(orderDto: OrderDto) {
     try {
@@ -91,6 +91,18 @@ export class OrderService {
       const order = await this.orderRepository.findByPk(id, {
         include: { all: true },
       });
+      if (!order) {
+        return { message: 'Sotib olingan kurs topilmadi!' };
+      }
+      return order;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async getByUserID(user_id: number) {
+    try {
+      const order = await this.orderRepository.findAll({ where: { user_id }, include: { all: true } });
       if (!order) {
         return { message: 'Sotib olingan kurs topilmadi!' };
       }
