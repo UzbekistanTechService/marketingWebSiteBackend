@@ -34,6 +34,12 @@ export class CartController {
     return this.cartService.getByID(id);
   }
 
+  @ApiOperation({ summary: 'Get user_id carts' })
+  @Delete(':user_id')
+  getByUserId(@Param('user_id', ParseIntPipe) user_id: number) {
+    return this.cartService.getByUserId(user_id);
+  }
+
   @ApiOperation({ summary: 'Cart delete by id' })
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {

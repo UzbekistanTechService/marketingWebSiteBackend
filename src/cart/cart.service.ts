@@ -74,4 +74,18 @@ export class CartService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async getByUserId(user_id: number) {
+    try {
+      const user_carts = await this.cartRepository.findAll({
+        where: {
+          user_id,
+        },
+        include: { all: true },
+      });
+      return user_carts;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
 }
