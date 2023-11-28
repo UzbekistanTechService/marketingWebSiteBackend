@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Delete,
-  ParseIntPipe,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/cart.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -29,20 +21,20 @@ export class CartController {
   }
 
   @ApiOperation({ summary: 'Cart get by id' })
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get('id/:id')
+  findOne(@Param('id') id: number) {
     return this.cartService.getByID(id);
   }
 
   @ApiOperation({ summary: 'Get user_id carts' })
-  @Delete(':user_id')
-  getByUserId(@Param('user_id', ParseIntPipe) user_id: number) {
+  @Get('user_id/:user_id')
+  getByUserId(@Param('user_id') user_id: number) {
     return this.cartService.getByUserId(user_id);
   }
 
   @ApiOperation({ summary: 'Cart delete by id' })
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: number) {
     return this.cartService.delete(id);
   }
 }
