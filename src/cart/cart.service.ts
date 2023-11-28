@@ -16,10 +16,12 @@ export class CartService {
   async create(cartDto: CreateCartDto) {
     try {
       const { user_id, course_id } = cartDto;
-      await this.getOne(`${user_id}-${course_id}`);
       await this.userService.getByID(user_id);
       await this.courseService.getByID(course_id);
-
+      const exist = await this.getOne(`${user_id}-${course_id}`);
+      if (exist) {
+        return { message: 'Already exist cart!' };
+      }
       const cart = await this.cartRepository.create(cartDto);
       return cart;
     } catch (error) {
@@ -28,13 +30,16 @@ export class CartService {
   }
 
   async getAll() {
-    const carts = await this.cartRepository.findAll();
+    const carts = await this.cartRepository.findAll({ include: { all: true } });
     return carts;
   }
 
   async getByID(id: number) {
     try {
-      const cart = await this.cartRepository.findOne({ where: { id } });
+      const cart = await this.cartRepository.findOne({
+        where: { id },
+        include: { all: true },
+      });
 
       if (!cart) {
         return { message: 'Cart not found' };
@@ -48,6 +53,7 @@ export class CartService {
     try {
       await this.getByID(id);
       await this.cartRepository.destroy({ where: { id } });
+      return { message: 'Course deleted from cart' };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

@@ -17,7 +17,7 @@ export class UserService {
     @InjectModel(User) private userRepository: typeof User,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) { }
+  ) {}
 
   async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
     try {
@@ -167,9 +167,14 @@ export class UserService {
       const check = await this.jwtService.verify(token, {
         secret: process.env.GOOGLE_TOKEN_KEY,
       });
-      const user = await this.userRepository.findOne({ where: { id: check.id } });
+      const user = await this.userRepository.findOne({
+        where: { id: check.id },
+      });
       if (!user) {
-        return { message: 'Unauthorizated!', statusCode: HttpStatus.UNAUTHORIZED, };
+        return {
+          message: 'Unauthorizated!',
+          statusCode: HttpStatus.UNAUTHORIZED,
+        };
       }
       if (new_password != confirm_new_password) {
         return { message: 'Password confirmation error!' };
