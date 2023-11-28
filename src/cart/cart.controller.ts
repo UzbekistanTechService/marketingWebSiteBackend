@@ -9,7 +9,9 @@ import {
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CreateCartDto } from './dto/cart.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('cart')
 @Controller('cart')
 export class CartController {
   constructor(private readonly cartService: CartService) {}
@@ -30,6 +32,12 @@ export class CartController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.cartService.getByID(id);
+  }
+
+  @ApiOperation({ summary: 'Get user_id carts' })
+  @Delete(':user_id')
+  getByUserId(@Param('user_id', ParseIntPipe) user_id: number) {
+    return this.cartService.getByUserId(user_id);
   }
 
   @ApiOperation({ summary: 'Cart delete by id' })
