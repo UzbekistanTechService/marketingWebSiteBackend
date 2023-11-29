@@ -43,11 +43,13 @@ export class UserService {
             expiresIn: process.env.GOOGLE_TOKEN_TIME,
           },
         );
-        return {
-          message: 'User signed in successfully',
-          data: user,
-          token,
-        };
+        this.writeToCookie(token, res);
+        res.redirect('http://localhost:3000/');
+        // return {
+        //   message: 'User signed in successfully',
+        //   data: user,
+        //   token,
+        // };
       }
       const token = await this.jwtService.signAsync(
         { id: exist.id },
