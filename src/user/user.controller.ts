@@ -32,8 +32,8 @@ export class UserController {
   @HttpCode(200)
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(@Req() req: any) {
-    return this.userService.googleAuthCallback(req.user);
+  async googleAuthCallback(@Req() req: any, @Res() res: Response) {
+    return this.userService.googleAuthCallback(req.user, res);
   }
 
   @ApiOperation({ summary: 'Sign up' })
