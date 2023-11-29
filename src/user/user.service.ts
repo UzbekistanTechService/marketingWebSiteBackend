@@ -45,11 +45,6 @@ export class UserService {
         );
         this.writeToCookie(token, res);
         res.redirect('http://localhost:3000/');
-        // return {
-        //   message: 'User signed in successfully',
-        //   data: user,
-        //   token,
-        // };
       }
       const token = await this.jwtService.signAsync(
         { id: exist.id },
