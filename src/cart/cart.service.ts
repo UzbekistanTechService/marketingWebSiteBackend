@@ -12,7 +12,7 @@ export class CartService {
     @InjectModel(Cart) private cartRepository: typeof Cart,
     private readonly userService: UserService,
     private readonly courseService: CourseService,
-  ) {}
+  ) { }
   async create(cartDto: CreateCartDto) {
     try {
       const { user_id, course_id } = cartDto;
@@ -41,10 +41,10 @@ export class CartService {
         where: { id },
         include: { all: true },
       });
-
       if (!cart) {
-        return { message: 'Cart not found' };
+        throw new BadRequestException('Cart not found!');
       }
+      return cart;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -52,8 +52,8 @@ export class CartService {
 
   async delete(id: number) {
     try {
-      await this.getByID(id);
-      await this.cartRepository.destroy({ where: { id } });
+      const cart = await this.getByID(id);
+      cart.destroy();
       return { message: 'Course deleted from cart' };
     } catch (error) {
       throw new BadRequestException(error.message);
