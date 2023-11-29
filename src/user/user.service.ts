@@ -56,11 +56,6 @@ export class UserService {
       );
       this.writeToCookie(token, res);
       res.redirect('http://localhost:3000/');
-      // return {
-      //   message: 'User signed in successfully',
-      //   data: exist,
-      //   token,
-      // };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
