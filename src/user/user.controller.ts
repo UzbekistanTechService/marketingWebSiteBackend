@@ -10,7 +10,6 @@ import {
   Param,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GoogleOauthGuard } from 'src/guard/google-oauth.guard';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CookieGetter } from 'src/decorators/cookieGetter.decorator';
 import { Response } from 'express';
@@ -18,6 +17,7 @@ import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signupdto';
 import { EmailDto } from './dto/email.dto';
 import { forgotPasswordDto } from './dto/forgot-password.dto';
+import { GoogleOauthGuard } from 'src/guard/google-oauth.guard';
 
 @ApiTags('user')
 @Controller('user')
