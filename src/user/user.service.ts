@@ -44,6 +44,7 @@ export class UserService {
           },
         );
         this.writeToCookie(token, res);
+        res.header('Content-Type', 'application/json');
         res.redirect('http://localhost:3000/');
       }
       const token = await this.jwtService.signAsync(
