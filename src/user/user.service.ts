@@ -19,7 +19,10 @@ export class UserService {
     private readonly mailService: MailService,
   ) {}
 
-  async googleAuthCallback({ provider, email, displayName }: IGoggleProfile) {
+  async googleAuthCallback(
+    { provider, email, displayName }: IGoggleProfile,
+    res: Response,
+  ) {
     try {
       const exist = await this.userRepository.findOne({
         where: { email },
@@ -53,11 +56,13 @@ export class UserService {
           expiresIn: process.env.GOOGLE_TOKEN_TIME,
         },
       );
-      return {
-        message: 'User signed in successfully',
-        data: exist,
-        token,
-      };
+      this.writeToCookie(token, res);
+      res.redirect('http://localhost:3000/');
+      // return {
+      //   message: 'User signed in successfully',
+      //   data: exist,
+      //   token,
+      // };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
