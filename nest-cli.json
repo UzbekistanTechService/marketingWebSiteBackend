@@ -5,6 +5,7 @@
     "compilerOptions": {
         "assets": [
             "mail/templates/**/*"
-        ]
+        ],
+        "watchAssets": true
     }
 }
